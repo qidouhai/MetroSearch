@@ -105,7 +105,7 @@ function find() {
                 ListElement.append(d.append(e));
                 $("#paths").append(
                     $("<div>", {
-                        "class": "panel-group col-xs-12 col-sm-6 col-md-4",
+                        "class": "panel-group col-xs-12 col-sm-6 col-md-4 col-lg-3",
                         id: "path" + a,
                         role: "tablist",
                         "aria-multiselectable": "true"

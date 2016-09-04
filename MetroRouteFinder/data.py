@@ -245,8 +245,7 @@ def generateDict(Paths, City, system="All"):
 
 def getRoute(City, From, To):
     k = getRawJson(City)
-    # b = [u"站数少", u"换乘少", u"抽象测试", u"实际测试"]
-    b = [u"站数少", u"换乘少", u"换乘多"]
+    b = [u"站数少", u"换乘少"]
     if "VirtualTransfers" in k:
         b.append(u"不出站")
     c = [(mode, mode, u"All") for mode in b]
@@ -289,11 +288,12 @@ def InfoCardArray(City):
     for i in xrange(length):
         for j in xrange(length):
             if (InfoCard[i][u'Name'] == InfoCard[j][u'Name']):
-                if InfoCard[i][u'Line'] == InfoCard[j][u'Line']:
-                    Array[u"Items"][u"同"].append((i, j))  # 同站、同线——用于处理环线使用
-                elif InfoCard[i][u'System'] == InfoCard[j][u'System']:
-                    Array[u"Items"][u"换"].append((i, j))  # 同站、不同线——说明是换乘站
-                    InfoCard[i][u'Interchange'] = True
+                if InfoCard[i][u'System'] == InfoCard[j][u'System']:
+                    if InfoCard[i][u'Line'] == InfoCard[j][u'Line']:
+                        Array[u"Items"][u"同"].append((i, j))  # 同站、同线——用于处理环线使用
+                    else:
+                        Array[u"Items"][u"换"].append((i, j))  # 同站、不同线——说明是换乘站
+                        InfoCard[i][u'Interchange'] = True
                 else:
                     Array[u"Items"][u"转"].append((i, j))  # 同站、不同线——说明是换乘站
                     InfoCard[i][u'Interchange'] = True
@@ -392,7 +392,7 @@ def dataProcess(Mode=u"InfoCardArray", City=u"Guangzhou"):
         except:
             k = eval(Mode)(City)
             file = open(filename, "w")
-            file.write(json.dumps(k))
+            file.write(json.dumps(k, indent=4))
             file.close()
     else:
         k = json.load(open(u"./data/{City}.json".format(City=City)))
